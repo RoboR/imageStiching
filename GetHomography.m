@@ -36,13 +36,7 @@ function homography = GetHomography(x, y, xp, yp)
     hMatrix   = [hEquiv(1), hEquiv(4), hEquiv(7);
                  hEquiv(2), hEquiv(5), hEquiv(8);
                  hEquiv(3), hEquiv(6), 1];
-
-    % Set to zero due to imtransform() will complain an error for : 
-    % The final column of A must consist of zeroes, 
-    % except for a one in the last row.
-    hMatrix(7) = 0;
-    hMatrix(8) = 0;
+    hMatrix   = hMatrix .* h33;
 
     homography = hMatrix;
 end
-
