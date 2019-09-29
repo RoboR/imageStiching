@@ -1,3 +1,5 @@
+clc;
+clear;
 startup()
 
 % Read image from file

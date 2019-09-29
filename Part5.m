@@ -1,4 +1,5 @@
 clc;
+clear;
 startup();
 
 % Read Image
@@ -12,7 +13,7 @@ I1                  = single(rgb2gray(imageOne));
 [frame1, desc1]     = vl_sift(I1);
 I2                  = single(rgb2gray(imageTwo));
 [frame2, desc2]     = vl_sift(I2);
-[matches, scores]   = vl_ubcmatch(desc1, desc2);
+matches             = KeypointMatching(desc1, desc2);
 
 % draw matched descriptor
 imgOneSize = size(I1, 2) ;
@@ -20,10 +21,10 @@ line([frame1(1, matches(1,:)); frame2(1, matches(2,:)) + imgOneSize], ...
      [frame1(2, matches(1,:)); frame2(2, matches(2,:))])
 
 % Compute RANSAC
-x  = [frame1(1, matches(1, :))];
-y  = [frame1(2, matches(1, :))];
-xp = [frame2(1, matches(2, :))];
-yp = [frame2(2, matches(2, :))];
+x   = [frame2(1, matches(2, :))];
+y   = [frame2(2, matches(2, :))];
+xp  = [frame1(1, matches(1, :))];
+yp  = [frame1(2, matches(1, :))];
 [homography, idx] = FindHomographyRANSAC(x, y, xp, yp);
 
 % Draw matched inliners
@@ -39,7 +40,7 @@ for i = 1:sizeRan
     ypRan   = round(yp(idx));
 end
 subplot(3, 1, 2), imshow(combImg), title("RANSAC SIFT points");
-line([xRan; xpRan + imgOneSize], ...
+line([xRan + imgOneSize; xpRan], ...
      [yRan; ypRan]) ;
 
 % Stitch the image
@@ -69,7 +70,7 @@ yMax            = max([maxImageSize(1); ylim(:)]);
 canvasWidth     = round(xMax - xMin);
 canvasHeight    = round(yMax - yMin);
 
-panorama = zeros([canvasHeight canvasWidth 3], 'like', imageOne);
+panorama = zeros([canvasHeight canvasWidth 3], 'uint8');
 blender  = vision.AlphaBlender('Operation', 'Binary mask', ...
                                'MaskSource', 'Input port');
 xLimits  = [xMin xMax];

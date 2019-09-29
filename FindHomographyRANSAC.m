@@ -1,7 +1,7 @@
 function [homography, index] = FindHomographyRANSAC(X, Y, XP, YP)
-    ITERATION               = 50;
+    ITERATION               = 35;
     RANDOM_SELECTED_POINTS  = 5;
-    INLIER_DISTANCE         = 25;
+    INLIER_DISTANCE         = 15;
 
     maxInliersFound =  0;
     inliersIndex    = [];
