@@ -32,7 +32,7 @@ end
 % Get transformation between images, final transformation is respect to the
 % first image
 for n = 2 : totalImage
-    [matches, scores]   = vl_ubcmatch(desc{n-1}, desc{n});
+    matches             = KeypointMatching(desc{n-1}, desc{n});
 
     % Compute RANSAC to find optimal transformation
     x = [frame{n}(1, matches(2, :))];
